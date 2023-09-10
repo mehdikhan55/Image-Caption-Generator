@@ -79,6 +79,7 @@ export default function UploadScreen({ navigation }) {
       setRecordId(newRecordId);
     }
 
+
     const imageRef = ref(storage, `images/${recordId + "_" + (new Date())}`);
 
     uploadBytes(imageRef, uploadedImage)
@@ -123,7 +124,7 @@ export default function UploadScreen({ navigation }) {
         alert('Record updated in Firestore');
       } else {
         // If the document doesn't exist, create it
-        await addDoc(docRef, {
+        await setDoc(docRef, {
           caption: caption,
           imageUrl: uploadedImageDownloadUrl,
           timestamp: new Date(),
@@ -140,6 +141,8 @@ export default function UploadScreen({ navigation }) {
     setCaption('');
     setUploadedImage(null);
     setUploadedImageDownloadUrl('')
+    setRecordId(null)
+    console.log("upload page reseted!")
   }
 
   return (
@@ -160,6 +163,9 @@ export default function UploadScreen({ navigation }) {
               style={[styles.textBox]} />
             <TouchableOpacity onPress={handleGeneration} style={styles.button}>
               <Text style={styles.genText}>Generate</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={resetUploadPage} style={styles.resetButton}>
+              <Text style={styles.genText}>Reset</Text>
             </TouchableOpacity>
 
           </View>
@@ -203,9 +209,20 @@ const styles = StyleSheet.create({
     height: 50,
     width: 250,
     alignSelf: 'center',
-    borderRadius: 40,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  resetButton: {
+    backgroundColor: primary,
+    height: 40,
+    width: 150,
+    alignSelf: 'center',
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10
   },
   genText: {
     fontSize: 24,
